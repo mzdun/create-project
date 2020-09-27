@@ -1,0 +1,225 @@
+# Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+# This file is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+cmake_minimum_required (VERSION 3.12)
+project ({{PROJECT.NAME}}
+  VERSION 0.1.0
+  DESCRIPTION "{{PROJECT.DESCRIPTION}}"
+  LANGUAGES CXX)
+
+set(PROJECT_VERSION_STABILITY "-alpha.0") # "", or "-alpha", or "-beta", or "-rc.5"
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+{{#with_platform}}
+
+find_package(PkgConfig)
+{{#platform}}
+pkg_check_modules({{link}}{{^link}}{{name}}{{/link}} REQUIRED IMPORTED_TARGET {{link}}{{^link}}{{name}}{{/link}})
+{{/platform}}
+{{/with_platform}}
+{{#with_github}}
+
+add_subdirectory(external)
+{{/with_github}}
+{{#with_conan}}
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+{{/with_conan}}
+
+# See <https://github.com/lefticus/cppbestpractices/blob/v1.0.0/02-Use_the_Tools_Available.md#compilers>
+if (MSVC)
+  set({{NAME_PREFIX}}_ADDITIONAL_WALL_FLAGS
+      /permissive-
+      /Zc:__cplusplus
+      /W4
+      /w14242
+      /w14254
+      /w14263
+      /w14265
+      /w14287
+      /we4289
+      /w14296
+      /w14311
+      /w14545
+      /w14546
+      /w14547
+      /w14549
+      /w14555
+      /w14619
+      /w14640
+      /w14826
+      /w14905
+      /w14906
+      /w14928
+      /w14946)
+else()
+  set({{NAME_PREFIX}}_ADDITIONAL_WALL_FLAGS
+      -Wall -Wextra
+      -Wnon-virtual-dtor
+      -Wold-style-cast
+      -Wcast-align
+      -Wunused
+      -Woverloaded-virtual
+      -Wpedantic
+      -Wconversion
+      -Wsign-conversion
+      -Wnull-dereference
+      -Wdouble-promotion
+      -Wformat=2
+  )
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    list(APPEND {{NAME_PREFIX}}_ADDITIONAL_WALL_FLAGS -fcolor-diagnostics) # -Wlifetime
+  else()
+    list(APPEND {{NAME_PREFIX}}_ADDITIONAL_WALL_FLAGS
+      -fdiagnostics-color
+      -Wmisleading-indentation
+      -Wduplicated-cond
+      -Wduplicated-branches
+      -Wlogical-op
+      -Wuseless-cast
+      )
+  endif()
+endif()
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               dirinfo.hh.in generation
+  !!               use_lib_lngs
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#use_lib_lngs}}
+
+set(SHARE_DIR share/{{PROJECT.NAME}}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+{{/use_lib_lngs}}
+
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               dirinfo.hh.in generation
+  !!               use_lib_lngs
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#use_lib_lngs}}
+configure_file({{SRCDIR}}/dirinfo{{EXT.hxx}}.in {{SRCDIR}}/dirinfo{{EXT.hxx}} @ONLY)
+{{/use_lib_lngs}}
+configure_file({{SRCDIR}}/version{{EXT.hxx}}.in {{INCLUDEDIR}}/version{{EXT.hxx}} @ONLY)
+{{#use_lib_lngs}}
+set(LANGUAGES pl)
+{{/use_lib_lngs}}
+
+set(SRCS
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               main.cc
+  !!               cmake.application
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#cmake.application}}
+  {{SRCDIR}}/main{{EXT.cxx}}
+{{/cmake.application}}
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               strings.(cc/hh)
+  !!               use_lib_lngs
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#use_lib_lngs}}
+  {{SRCDIR}}/strings{{EXT.hxx}}
+  {{SRCDIR}}/strings{{EXT.cxx}}
+{{/use_lib_lngs}}
+  {{SRCDIR}}/version{{EXT.cxx}}
+  "${CMAKE_CURRENT_BINARY_DIR}/{{INCLUDEDIR}}/version{{EXT.hxx}}"
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               dirinfo.hh
+  !!               use_lib_lngs
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#use_lib_args}}
+  "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/dirinfo{{EXT.hxx}}"
+{{/use_lib_args}}
+{{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!
+  !!               idl2cc/hh
+  !!               use_lib_lngs
+  !!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}}
+{{#use_lib_lngs}}
+  "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.cxx}}"
+  "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.hxx}}"
+{{/use_lib_lngs}}
+)
+
+{{#use_lib_lngs}}
+foreach(LANG ${LANGUAGES})
+  set(__po "${CMAKE_CURRENT_SOURCE_DIR}/data/strings/${LANG}.po")
+  set(__lng "${CMAKE_CURRENT_BINARY_DIR}/${SHARE_DIR}/{{PROJECT.NAME}}.${LANG}")
+  message(STATUS "${__po} -> ${__lng}")
+  list(APPEND SRCS ${__po} ${__lng})
+
+  add_custom_command(OUTPUT "${__lng}"
+    COMMAND lngs
+    ARGS make
+      --in "${CMAKE_CURRENT_SOURCE_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings.idl"
+      --msgs "${__po}"
+      --lang "${CMAKE_CURRENT_SOURCE_DIR}/data/strings/llcc.txt"
+      --out "${__lng}"
+    DEPENDS ${__po}
+    VERBATIM)
+endforeach()
+
+add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.cxx}}"
+  COMMAND lngs
+  ARGS res
+{{#use_lib_fmt}}
+    --warp
+{{/use_lib_fmt}}
+    --in "${CMAKE_CURRENT_SOURCE_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings.idl"
+    --include "{{PROJECT.NAME}}-strings{{EXT.hxx}}"
+    --out "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.cxx}}"
+  DEPENDS {{SRCDIR}}/{{PROJECT.NAME}}-strings.idl
+  VERBATIM)
+
+add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.hxx}}"
+  COMMAND lngs
+  ARGS enums
+    --resource 
+    --in "${CMAKE_CURRENT_SOURCE_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings.idl"
+    --out "${CMAKE_CURRENT_BINARY_DIR}/{{SRCDIR}}/{{PROJECT.NAME}}-strings{{EXT.hxx}}"
+  DEPENDS {{SRCDIR}}/{{PROJECT.NAME}}-strings.idl
+  VERBATIM)
+{{/use_lib_lngs}}
+
+{{cmake.cmd}}(${PROJECT_NAME}{{cmake.type}} ${SRCS})
+
+target_compile_options(${PROJECT_NAME} PRIVATE {{${}}{{NAME_PREFIX}}_ADDITIONAL_WALL_FLAGS})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/include
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_BINARY_DIR}/src
+)
+target_link_libraries(${PROJECT_NAME} {{cmake.link_access}}{{!
+  CONAN ---------------------------------------------------
+}}{{#conan}} CONAN_PKG::{{link}}{{^link}}{{name}}{{/link}}{{/conan}}{{!
+  EXTERNAL ------------------------------------------------
+}}{{#github}} {{link}}{{^link}}{{repo}}{{/link}}{{/github}}{{!
+  PLATFORM ------------------------------------------------
+}}{{#platform}} PkgConfig::{{link}}{{^link}}{{name}}{{/link}}{{/platform}})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+{{#cmake.dynamic-library}}
+  SOVERSION ${PROJECT_VERSION_MAJOR}
+{{/cmake.dynamic-library}}
+)
+
+##################################################################
+##  INSTALL
+##################################################################
+
+if ({{NAME_PREFIX}}_INSTALL)
+  install(TARGETS ${PROJECT_NAME})
+  install(DIRECTORY {{INCLUDEDIR}} DESTINATION include)
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/{{INCLUDEDIR}}/version.hh" DESTINATION {{INCLUDEDIR}})
+endif()

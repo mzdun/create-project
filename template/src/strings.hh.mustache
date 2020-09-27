@@ -1,0 +1,60 @@
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+#pragma once
+
+{{#use_lib_args}}
+#include <args/translator.hpp>
+{{/use_lib_args}}
+#include "{{PROJECT.NAME}}-strings.hh"
+
+namespace {{NAMESPACE}} {
+{{#use_lib_args}}
+	class strings : public args::base_translator {
+{{/use_lib_args}}
+{{^use_lib_args}}
+	class strings {
+{{/use_lib_args}}
+	public:
+		explicit strings();
+
+		std::string_view operator()(lng str) const {
+			auto result = installed_.get(str);
+			if (result.empty()) result = built_.get(str);
+			return result;
+		}
+
+		std::string_view operator()(counted str, intmax_t count) const {
+			auto result = installed_.get(str, count);
+			if (result.empty()) result = built_.get(str, count);
+			return result;
+		}
+
+	private:
+{{#use_lib_args}}
+		std::string operator()(args::lng id,
+		                       std::string_view,
+		                       std::string_view) const final;
+{{/use_lib_args}}
+
+		struct InstalledStrings : Strings::rebind<> {
+			std::string_view get(lng str) const noexcept {
+				return get_string(static_cast<identifier>(str));
+			}
+			std::string_view get(counted str, intmax_t count) const noexcept {
+				return get_string(static_cast<identifier>(str),
+				                  static_cast<quantity>(count));
+			}
+		} installed_{};
+
+		struct BuiltStrings : Strings {
+			std::string_view get(lng str) const noexcept {
+				return get_string(static_cast<identifier>(str));
+			}
+			std::string_view get(counted str, intmax_t count) const noexcept {
+				return get_string(static_cast<identifier>(str),
+				                  static_cast<quantity>(count));
+			}
+		} built_{};
+	};
+}  // namespace {{NAMESPACE}}

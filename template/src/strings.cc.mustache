@@ -1,0 +1,71 @@
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+#include "strings{{EXT.hxx}}"
+{{#use_lib_fmt}}
+#include <fmt/core.h>
+{{/use_lib_fmt}}
+#include "dirinfo{{EXT.hxx}}"
+
+namespace {{NAMESPACE}} {
+	strings::strings() {
+		installed_.path_manager<lngs::manager::ExtensionPath>(
+		    dirinfo::info::install, "{{PROJECT.NAME}}");
+		built_.path_manager<lngs::manager::ExtensionPath>(
+		    dirinfo::info::build, "{{PROJECT.NAME}}");
+
+		auto system = lngs::system_locales();
+		built_.init();
+		if (installed_.open_first_of(system)) {
+			auto culture = installed_.attr(lngs::ATTR_CULTURE);
+			if (!culture.empty()) {
+				built_.open(culture);
+				return;
+			}
+		}
+		built_.open_first_of(system);
+	}
+{{#use_lib_args}}
+
+	std::string strings::operator()(args::lng id,
+	                                std::string_view arg1,
+	                                std::string_view arg2) const {
+		auto const ident = [](auto id) {
+			switch (id) {
+				case args::lng::usage:
+					return lng::ARGS_USAGE;
+				case args::lng::def_meta:
+					return lng::ARGS_DEF_META;
+				case args::lng::positionals:
+					return lng::ARGS_POSITIONALS;
+				case args::lng::optionals:
+					return lng::ARGS_OPTIONALS;
+				case args::lng::help_description:
+					return lng::ARGS_HELP_DESCRIPTION;
+				case args::lng::unrecognized:
+					return lng::ARGS_UNRECOGNIZED;
+				case args::lng::needs_param:
+					return lng::ARGS_NEEDS_PARAM;
+				case args::lng::needs_number:
+					return lng::ARGS_NEEDS_NUMBER;
+				case args::lng::needed_number_exceeded:
+					return lng::ARGS_NEEDED_NUMBER_EXCEEDED;
+				case args::lng::required:
+					return lng::ARGS_REQUIRED;
+				case args::lng::error_msg:
+					return lng::ARGS_ERROR_MSG;
+			};
+			return static_cast<lng>(0);
+		}(id);
+{{#use_lib_fmt}}
+		return fmt::format((*this)(ident), arg1, arg2);
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+		auto const msg = (*this)(ident);
+		char buffer[512];
+		snprintf(buffer, sizeof buffer, msg.data(), arg1.data(), arg2.data());
+		return buffer;
+{{/use_lib_fmt}}
+	}
+{{/use_lib_args}}
+}  // namespace {{NAMESPACE}}

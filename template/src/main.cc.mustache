@@ -1,0 +1,72 @@
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+{{#use_lib_fmt}}
+#include <fmt/format.h>
+{{/use_lib_fmt}}
+#include <args/parser.hpp>
+#include <{{INCLUDE_PREFIX}}/version{{EXT.hxx}}>
+{{#use_lib_lngs}}
+#include "strings.hh"
+{{/use_lib_lngs}}
+
+{{#use_lib_lngs}}
+static inline std::string str(std::string_view view) {
+	return {view.data(), view.size()};
+}
+{{/use_lib_lngs}}
+
+int main(int argc, char* argv[]) {
+	std::string path;
+	bool verbose{false};
+	long counter{};
+
+{{#use_lib_lngs}}
+	{{NAMESPACE}}::strings tr{};
+	args::parser parser{str(tr({{NAMESPACE}}::lng::ARGS_DESCRIPTION)),
+	                    args::from_main(argc, argv), &tr};
+{{/use_lib_lngs}}
+{{^use_lib_lngs}}
+	args::null_translator tr{};
+	args::parser parser{"{{PROJECT.DESCRIPTION}}",
+	                    args::from_main(argc, argv), &tr};
+{{/use_lib_lngs}}
+{{#use_lib_lngs}}
+	parser.arg(path, "path")
+	    .meta(tr({{NAMESPACE}}::lng::ARGS_APP_PATH_META))
+	    .help(tr({{NAMESPACE}}::lng::ARGS_APP_PATH));
+	parser.set<std::true_type>(verbose, "v")
+	    .help(tr({{NAMESPACE}}::lng::ARGS_APP_VERBOSE))
+	    .opt();
+	parser.arg(counter).meta("N").help(tr({{NAMESPACE}}::lng::ARGS_APP_N));
+{{/use_lib_lngs}}
+{{^use_lib_lngs}}
+	parser.arg(path, "path").meta("<file>").help("sets the path of foobar");
+	parser.set<std::true_type>(verbose, "v")
+	    .help("sets the output to be more verbose")
+	    .opt();
+	parser.arg(counter).meta("N").help(
+	    "sets the argument for the plural string");
+{{/use_lib_lngs}}
+	parser.parse();
+
+{{#use_lib_lngs}}
+	auto msg = tr({{NAMESPACE}}::counted::FOOBAR_COUNT, counter);
+{{/use_lib_lngs}}
+{{^use_lib_lngs}}
+	auto msg = std::string_view{counter == 1 ? "you have one foobar"
+{{#use_lib_fmt}}
+	                                         : "you have {0} foobars"};
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	                                         : "you have %ld foobars"};
+{{/use_lib_fmt}}
+{{/use_lib_lngs}}
+{{#use_lib_fmt}}
+	fmt::print(msg, counter);
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	printf(msg.data(), counter);
+{{/use_lib_fmt}}
+	fputc('\n', stdout);
+}

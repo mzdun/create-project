@@ -1,0 +1,82 @@
+[
+	project("{{PROJECT.NAME}}"),
+	version("0.1.0"),
+	serial(1)
+] strings {
+{{#use_lib_args}}
+	[help("Description of the application"), id(-1)]
+	ARGS_DESCRIPTION="{{PROJECT.DESCRIPTION}}";
+	[help("Synopsis header; please note there is one space at the end of this entry"), id(-1)]
+	ARGS_USAGE = "usage: ";
+	[help("Default name of an argument"), id(-1)]
+	ARGS_DEF_META = "<arg>";
+	[help("Header for list of positional arguments"), id(-1)]
+	ARGS_POSITIONALS = "positional arguments";
+	[help("Header for list of optional arguments"), id(-1)]
+	ARGS_OPTIONALS = "optional arguments";
+	[help("Description for the -h/--help argument"), id(-1)]
+	ARGS_HELP_DESCRIPTION = "shows this help message and exits";
+	[help("Error message for an unrecognized argument; the placeholder will contain the name of the argument"), id(-1)]
+{{#use_lib_fmt}}
+	ARGS_UNRECOGNIZED = "unrecognized argument: {0}";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	ARGS_UNRECOGNIZED = "unrecognized argument: %s";
+{{/use_lib_fmt}}
+	[help("Error message for a missing argument"), id(-1)]
+{{#use_lib_fmt}}
+	ARGS_NEEDS_PARAM = "argument {0}: expected one argument";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	ARGS_NEEDS_PARAM = "argument %s: expected one argument";
+{{/use_lib_fmt}}
+	[help("Error message for a numeric argument, when parsing failed"), id(-1)]
+{{#use_lib_fmt}}
+	ARGS_NEEDS_NUMBER = "argument {0}: expected a number";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	ARGS_NEEDS_NUMBER = "argument %s: expected a number";
+{{/use_lib_fmt}}
+	[help("Error message for a numeric argument, when parsing would get outside of representable bounds"), id(-1)]
+{{#use_lib_fmt}}
+	ARGS_NEEDED_NUMBER_EXCEEDED = "argument {0}: number outside of expected bounds";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	ARGS_NEEDED_NUMBER_EXCEEDED = "argument %s: number outside of expected bounds";
+{{/use_lib_fmt}}
+	[help("Error message for a missing required argument"), id(-1)]
+{{#use_lib_fmt}}
+	ARGS_REQUIRED = "argument {0} is required";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	ARGS_REQUIRED = "argument %s is required";
+{{/use_lib_fmt}}
+{{#use_lib_fmt}}
+	[help("Error message template; placeholder 0 will get the name of program, placeholder 1 an actual message"), id(-1)]
+	ARGS_ERROR_MSG = "{0}: error: {1}";
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	[help("Error message template; first argument will get the name of program, second argument will be an actual message"), id(-1)]
+	ARGS_ERROR_MSG = "%s: error: %s";
+{{/use_lib_fmt}}
+
+	[help("Description for the --path argument"), id(-1)]
+	ARGS_APP_PATH = "sets the path of foobar";
+	[help("Name for the --path argument's value"), id(-1)]
+	ARGS_APP_PATH_META = "<file>";
+	[help("Description for the -v argument"), id(-1)]
+	ARGS_APP_VERBOSE = "sets the output to be more verbose";
+	[help("Description for the positional argument"), id(-1)]
+	ARGS_APP_N = "sets the argument for the plural string";
+
+{{/use_lib_args}}
+	[help("A singular string"), id(-1)]
+	SOME_STRING = "a string";
+{{#use_lib_fmt}}
+	[help("A plural string"), plural("you have {0} foobars"), id(-1)]
+{{/use_lib_fmt}}
+{{^use_lib_fmt}}
+	[help("A plural string"), plural("you have %ld foobars"), id(-1)]
+{{/use_lib_fmt}}
+	FOOBAR_COUNT = "you have one foobar";
+}

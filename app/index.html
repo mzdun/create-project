@@ -1,0 +1,155 @@
+<head>
+    <title>Viewer...</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Ubuntu|Ubuntu+Mono' rel='stylesheet'
+        type='text/css'>
+    <style>
+        body {
+            background: #eee;
+            color: #111;
+            overflow: hidden;
+            font-family: "Open Sans Condensed";
+        }
+
+        pre,
+        code {
+            font-family: "Ubuntu Mono", monospace, monospace;
+            tab-size: 4;
+        }
+
+        strong {
+            color: #400
+        }
+
+        #content {
+            display: flex;
+            max-height: 100vh;
+            flex-direction: column;
+        }
+
+        #viewer_parent {
+            overflow: scroll;
+        }
+
+        #viewers {
+            display: flex;
+            max-width: 100vw;
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .root {
+            max-width: 100vw;
+            border-radius: 4px;
+            margin: 1rem;
+            background: #fff;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .filenames {
+            padding: 1rem;
+        }
+
+        .file,
+        .path {
+            display: inline-block;
+        }
+
+        .file::before {
+            content: "\00A0(from ";
+        }
+
+        .file::after {
+            content: ")";
+        }
+
+        .file {
+            color: #555
+        }
+
+        pre {
+            color: #111;
+            background: #bbb;
+            max-height: 100%;
+            overflow: auto;
+            padding: 1rem;
+            margin: 0;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        pre a {
+            color: #111;
+            text-decoration: none;
+        }
+
+        pre strong {
+            color: #A44
+        }
+
+        .input {
+            display: flex;
+            justify-content: space-between;
+            margin: .5rem;
+        }
+
+        .form {
+            display: flex;
+            min-width: 100vw;
+            align-items: stretch;
+        }
+
+        .inputs {
+            flex-grow: 1;
+            margin: 0;
+            padding: 0 1rem;
+            border-left: solid 1px #ddd;
+        }
+
+        .input:first-child {
+            border-left: none;
+        }
+
+        label, input { font-size: .9rem;}
+        input { font-family: Ubuntu;}
+
+        .form {
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            padding-bottom: 1rem;
+        }
+
+        form {
+            margin: 0;
+        }
+
+        #form {
+            z-index: 2;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id='content'>
+        <div id='form'></div>
+        <div id='viewer_parent'>
+            <div id='viewers'></div>
+        </div>
+    </div>
+</body>
+<script type="module">
+    import views from './mjs/views.mjs'
+    import model from './mjs/model.mjs'
+
+    window.onload = async function () {
+        await model.loadModel()
+        views.createForm('#form')
+        views.createViewers('#viewers')
+        await model.loadFiles()
+        views.renderFiles()
+    }
+</script>

@@ -1,0 +1,8 @@
+/.vscode/
+/created-project/
+/config.json
+__pycache__/
+*.py[cod]
+*$py.class
+node_modules/
+build/

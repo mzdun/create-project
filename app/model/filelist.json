@@ -1,0 +1,64 @@
+{
+    ".github/ISSUE_TEMPLATE/bug_report.md.mustache": {
+        "when": "dot_github"
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.md.mustache": {
+        "when": "dot_github"
+    },
+    "src/version.hh.in.mustache": {
+        "path": "{{SRCDIR}}/version{{EXT.hxx}}.in"
+    },
+    "src/version.cc.mustache": {
+        "path": "{{SRCDIR}}/version{{EXT.cxx}}"
+    },
+    "src/main.cc.mustache": {
+        "path": "{{SRCDIR}}/main{{EXT.cxx}}",
+        "when": "cmake.application"
+    },
+    "src/strings.idl.mustache": {
+        "path": "{{SRCDIR}}/{{PROJECT.NAME}}-strings.idl",
+        "when": "use_lib_lngs"
+    },
+    "src/dirinfo.hh.in.mustache": {
+        "path": "{{SRCDIR}}/dirinfo{{EXT.hxx}}.in",
+        "when": "use_lib_lngs"
+    },
+    "src/strings.hh.mustache": {
+        "path": "{{SRCDIR}}/strings{{EXT.hxx}}",
+        "when": "use_lib_lngs"
+    },
+    "src/strings.cc.mustache": {
+        "path": "{{SRCDIR}}/strings{{EXT.cxx}}",
+        "when": "use_lib_lngs"
+    },
+    "data/strings/llcc.txt.mustache": {
+        "when": "use_lib_lngs"
+    },
+    "data/strings/project.pot.mustache": {
+        "path": "data/strings/{{PROJECT.NAME}}.pot",
+        "when": "use_lib_lngs"
+    },
+    "data/strings/pl.po.mustache": {
+        "when": "use_lib_lngs"
+    },
+    "external/CMakeLists.txt.mustache": {
+        "when": "with_github"
+    },
+    "gitignore": {
+        "path": ".gitignore"
+    },
+    "clang-format": {
+        "path": ".clang-format"
+    },
+    "conanfile.txt.mustache": {
+        "when": "with_conan"
+    },
+    "CMakeLists.txt.mustache": {},
+    "CODE_OF_CONDUCT.md.mustache": {
+        "when": "github_social"
+    },
+    "CONTRIBUTING.md.mustache": {
+        "when": "github_social"
+    },
+    "README.md.mustache": {}
+}

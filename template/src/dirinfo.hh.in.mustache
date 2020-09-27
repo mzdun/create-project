@@ -1,0 +1,25 @@
+// DO NOT MODIFY, THIS FILE IS GENERATED FROM dirinfo{{EXT.hxx}}.in
+//
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+#line 7 "{{SRCDIR}}/dirinfo{{EXT.hxx}}.in"
+
+#pragma once
+{{^format_codegen}}
+
+// clang-format off
+{{/format_codegen}}
+
+#include <lngs/file.hpp>
+
+namespace {{NAMESPACE}}::dirinfo {
+	struct info {
+		constexpr static const char install[] = "@CMAKE_INSTALL_PREFIX@/@SHARE_DIR@";
+		constexpr static const char build[] = "@CMAKE_CURRENT_BINARY_DIR@/@SHARE_DIR@";
+	};
+}  // namespace {{NAMESPACE}}::dirinfo
+{{^format_codegen}}
+
+// clang-format on
+{{/format_codegen}}

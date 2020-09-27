@@ -1,0 +1,112 @@
+# {{PROJECT.DESCRIPTION}}.
+# Copyright (C) {{COPY.YEAR}} {{COPY.HOLDER}}
+# This file is distributed under the same license as the {{PROJECT.NAME}} package.
+# {{PROJECT.EMAIL}}, {{COPY.YEAR}}.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: {{PROJECT.NAME}} 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: {{NOW}}\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+{{#use_lib_args}}
+#. Description for the positional argument
+msgctxt "ARGS_APP_N"
+msgid "sets the argument for the plural string"
+msgstr ""
+
+#. Description for the --path argument
+msgctxt "ARGS_APP_PATH"
+msgid "sets the path of foobar"
+msgstr ""
+
+#. Name for the --path argument's value
+msgctxt "ARGS_APP_PATH_META"
+msgid "<file>"
+msgstr ""
+
+#. Description for the -v argument
+msgctxt "ARGS_APP_VERBOSE"
+msgid "sets the output to be more verbose"
+msgstr ""
+
+#. Default name of an argument
+msgctxt "ARGS_DEF_META"
+msgid "<arg>"
+msgstr ""
+
+#. Description of the application
+msgctxt "ARGS_DESCRIPTION"
+msgid "{{PROJECT.DESCRIPTION}}"
+msgstr ""
+
+#. Error message template; placeholder 0 will get the name of program, placeholder 1 an actual message
+msgctxt "ARGS_ERROR_MSG"
+msgid {{#use_lib_fmt}}"{0}: error: {1}"{{/use_lib_fmt}}{{^use_lib_fmt}}"%s: error: %s"{{/use_lib_fmt}}
+msgstr ""
+
+#. Description for the -h/--help argument
+msgctxt "ARGS_HELP_DESCRIPTION"
+msgid "shows this help message and exits"
+msgstr ""
+
+#. Error message for a numeric argument, when parsing would get outside of representable bounds
+msgctxt "ARGS_NEEDED_NUMBER_EXCEEDED"
+msgid {{#use_lib_fmt}}"argument {0}: number outside of expected bounds"{{/use_lib_fmt}}{{^use_lib_fmt}}"argument %s: number outside of expected bounds"{{/use_lib_fmt}}
+msgstr ""
+
+#. Error message for a numeric argument, when parsing failed
+msgctxt "ARGS_NEEDS_NUMBER"
+msgid {{#use_lib_fmt}}"argument {0}: expected a number"{{/use_lib_fmt}}{{^use_lib_fmt}}"argument %s: expected a number"{{/use_lib_fmt}}
+msgstr ""
+
+#. Error message for a missing argument
+msgctxt "ARGS_NEEDS_PARAM"
+msgid {{#use_lib_fmt}}"argument {0}: expected one argument"{{/use_lib_fmt}}{{^use_lib_fmt}}"argument %s: expected one argument"{{/use_lib_fmt}}
+msgstr ""
+
+#. Header for list of optional arguments
+msgctxt "ARGS_OPTIONALS"
+msgid "optional arguments"
+msgstr ""
+
+#. Header for list of positional arguments
+msgctxt "ARGS_POSITIONALS"
+msgid "positional arguments"
+msgstr ""
+
+#. Error message for a missing required argument
+msgctxt "ARGS_REQUIRED"
+msgid {{#use_lib_fmt}}"argument {0} is required"{{/use_lib_fmt}}{{^use_lib_fmt}}"argument %s is required"{{/use_lib_fmt}}
+msgstr ""
+
+#. Error message for an unrecognized argument; the placeholder will contain the name of the argument
+msgctxt "ARGS_UNRECOGNIZED"
+msgid {{#use_lib_fmt}}"unrecognized argument: {0}"{{/use_lib_fmt}}{{^use_lib_fmt}}"unrecognized argument: %s"{{/use_lib_fmt}}
+msgstr ""
+
+#. Synopsis header; please note there is one space at the end of this entry
+msgctxt "ARGS_USAGE"
+msgid "usage: "
+msgstr ""
+
+{{/use_lib_args}}
+#. A plural string
+msgctxt "FOOBAR_COUNT"
+msgid "you have one foobar"
+msgid_plural {{#use_lib_fmt}}"you have {0} foobars"{{/use_lib_fmt}}{{^use_lib_fmt}}"you have %ld foobars"{{/use_lib_fmt}}
+msgstr[0] ""
+msgstr[1] ""
+
+#. A singular string
+msgctxt "SOME_STRING"
+msgid "a string"
+msgstr ""

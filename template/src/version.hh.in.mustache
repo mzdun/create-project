@@ -1,0 +1,41 @@
+// DO NOT MODIFY, THIS FILE IS GENERATED FROM version{{EXT.hxx}}.in
+//
+// @PROJECT_NAME@/@PROJECT_VERSION@@PROJECT_VERSION_STABILITY@
+//
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+#line 9 "{{SRCDIR}}/version{{EXT.hxx}}.in"
+
+#pragma once
+{{^format_codegen}}
+
+// clang-format off
+{{/format_codegen}}
+{{#c_macros}}
+
+#define {{NAME_PREFIX}}_NAME "@PROJECT_NAME@"
+#define {{NAME_PREFIX}}_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define {{NAME_PREFIX}}_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define {{NAME_PREFIX}}_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define {{NAME_PREFIX}}_VERSION_STABILITY "@PROJECT_VERSION_STABILITY@"
+{{/c_macros}}
+{{#use_lib_semver}}
+
+{{#rc_guards}}
+#ifndef RC_INVOKED
+{{/rc_guards}}
+#include <semver/semver.hh>
+
+namespace {{NAMESPACE}} {
+	inline constexpr semver::project_version version{"@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@@PROJECT_VERSION_STABILITY@"};
+	semver::project_version get_version() noexcept;
+}  // namespace {{NAMESPACE}}
+{{#rc_guards}}
+#endif  // RC_INVOKED
+{{/rc_guards}}
+{{/use_lib_semver}}
+{{^format_codegen}}
+
+// clang-format on
+{{/format_codegen}}

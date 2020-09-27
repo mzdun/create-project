@@ -1,0 +1,40 @@
+git init
+git add .
+{{#github}}
+git submodule add https://github.com/{{username}}/{{repo}}.git external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}}
+{{#tag}}
+git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
+git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout {{tag}}
+{{/tag}}{{^tag}}{{#version}}
+git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
+git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout v{{version}}
+{{/version}}{{/tag}}
+{{/github}}
+mkdir build
+{{#with_conan}}
+cd build && CXX=g++-10 CC=gcc-10 conan install .. --build missing -s build_type=Debug
+{{/with_conan}}
+cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+ninja -C build
+{{#cmake.application}}
+{{#with_conan}}
+build/bin/{{PROJECT.NAME}} -h
+build/bin/{{PROJECT.NAME}} --path dummy 0
+build/bin/{{PROJECT.NAME}} --path dummy 1
+build/bin/{{PROJECT.NAME}} --path dummy 2
+build/bin/{{PROJECT.NAME}} --path dummy 3
+build/bin/{{PROJECT.NAME}} --path dummy 4
+build/bin/{{PROJECT.NAME}} --path dummy 5
+build/bin/{{PROJECT.NAME}} --path dummy 6
+{{/with_conan}}
+{{^with_conan}}
+build/{{PROJECT.NAME}} -h
+build/{{PROJECT.NAME}} --path dummy 0
+build/{{PROJECT.NAME}} --path dummy 1
+build/{{PROJECT.NAME}} --path dummy 2
+build/{{PROJECT.NAME}} --path dummy 3
+build/{{PROJECT.NAME}} --path dummy 4
+build/{{PROJECT.NAME}} --path dummy 5
+build/{{PROJECT.NAME}} --path dummy 6
+{{/with_conan}}
+{{/cmake.application}}

@@ -1,0 +1,177 @@
+{
+    "dropdowns": {
+        "PROJECT.TYPE": [
+            "console-application",
+            "win32-application",
+            "macos-application",
+            "static-library",
+            "shared-library",
+            "plugin-library"
+        ],
+        "COPY.LICENSE": [
+            "0BSD",
+            "MIT",
+            "Unlicense",
+            "WTFPL",
+            "Zlib"
+        ],
+        "EXT": [
+            ".cc",
+            ".cxx",
+            ".cpp"
+        ]
+    },
+    "switches": {
+        "format_codegen": false,
+        "c_macros": true,
+        "rc_guards": true,
+        "dot_github": true,
+        "github_social": true
+    },
+    "defaults": {
+        "PROJECT.NAME": "?project-name?",
+        "PROJECT.DESCRIPTION": "?project-description?",
+        "PROJECT.EMAIL": "?valid-email?",
+        "PROJECT.TYPE": "",
+        "COPY.YEAR": "",
+        "COPY.HOLDER": "?copyright holder?",
+        "COPY.LICENSE": "",
+        "INCLUDE_PREFIX": "",
+        "NAME_PREFIX": "",
+        "NAMESPACE": "",
+        "EXT": "",
+        "SRCDIR": "",
+        "INCLUDEDIR": "",
+        "NOW": ""
+    },
+    "hidden": {
+        "${": "${"
+    },
+    "cmake": {
+        "": {
+            "cmd": "add_executable",
+            "type": ""
+        },
+        "console-application": {
+            "cmd": "add_executable",
+            "type": "",
+            "console-application": true,
+            "console": true,
+            "application": true,
+            "link_access": "PRIVATE"
+        },
+        "win32-application": {
+            "cmd": "add_executable",
+            "type": " WIN32",
+            "win32-application": true,
+            "win32": true,
+            "application": true,
+            "link_access": "PRIVATE"
+        },
+        "macos-application": {
+            "cmd": "add_executable",
+            "type": " MACOSX_BUNDLE",
+            "macos-application": true,
+            "macos": true,
+            "bundle": true,
+            "application": true,
+            "link_access": "PRIVATE"
+        },
+        "static-library": {
+            "cmd": "add_library",
+            "type": " STATIC",
+            "static-library": true,
+            "static": true,
+            "library": true,
+            "link_access": "PUBLIC"
+        },
+        "shared-library": {
+            "cmd": "add_library",
+            "type": " SHARED",
+            "shared-library": true,
+            "shared": true,
+            "library": true,
+            "link_access": "PUBLIC"
+        },
+        "plugin-library": {
+            "cmd": "add_library",
+            "type": " MODULE",
+            "plugin-library": true,
+            "plugin": true,
+            "library": true,
+            "link_access": "PUBLIC"
+        }
+    },
+    "fixups": [
+        {
+            "field": "PROJECT.TYPE",
+            "fixup": "console-application"
+        },
+        {
+            "field": "INCLUDE_PREFIX",
+            "fixup": "{PROJECT.NAME}"
+        },
+        {
+            "field": "NAME_PREFIX",
+            "fixup": "{PROJECT.NAME$safe$upper}"
+        },
+        {
+            "field": "NAMESPACE",
+            "fixup": "{PROJECT.NAME$safe}"
+        },
+        {
+            "field": "COPY.LICENSE",
+            "fixup": "MIT"
+        },
+        {
+            "field": "COPY.YEAR",
+            "fixup": "{$year}"
+        },
+        {
+            "field": "EXT",
+            "fixup": ".cc"
+        },
+        {
+            "field": "SRCDIR",
+            "fixup": "src"
+        },
+        {
+            "field": "INCLUDEDIR",
+            "fixup": "include"
+        },
+        {
+            "field": "EXT.cxx",
+            "fixup": "{EXT}"
+        },
+        {
+            "field": "EXT.hxx",
+            "fixup": "{EXT.cxx$h}"
+        },
+        {
+            "field": "EXT_hint",
+            "fixup": "{EXT.cxx}"
+        },
+        {
+            "field": "INCLUDEDIR_hint",
+            "fixup": "{INCLUDEDIR}"
+        },
+        {
+            "field": "cmake",
+            "fixup": "{PROJECT.TYPE$map:cmake}"
+        },
+        {
+            "field": "INCLUDEDIR",
+            "fixup": "{INCLUDEDIR}/{INCLUDE_PREFIX}",
+            "force": true
+        },
+        {
+            "field": "NOW",
+            "fixup": "{$now}"
+        }
+    ],
+    "fileext": {
+        ".cc": ".hh",
+        ".cxx": ".hxx",
+        ".cpp": ".hpp"
+    }
+}

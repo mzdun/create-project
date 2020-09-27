@@ -1,0 +1,54 @@
+{
+    "lib_kinds": [
+        "github",
+        "conan",
+        "platform"
+    ],
+    "libname_tmplt": "{{#conan}}{{name}}/{{version}}{{#account}}<small>@{{acc_name}}/{{channel}}</small>{{/account}}{{/conan}}{{#github}}{{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/github}}{{#platform}}{{name}}{{/platform}}",
+    "libs": {
+        "lib_semver": {
+            "use": true,
+            "github": true,
+            "username": "mbits-libs",
+            "repo": "semver"
+        },
+        "lib_args": {
+            "use": true,
+            "github": true,
+            "username": "mbits-libs",
+            "repo": "args",
+            "version": "0.10.0"
+        },
+        "lib_ctre": {
+            "use": false,
+            "github": true,
+            "username": "hanickadot",
+            "repo": "compile-time-regular-expressions",
+            "dirname": "ctre",
+            "link": "ctre::ctre",
+            "options": [ { "name": "CTRE_BUILD_TESTS", "value": "OFF" } ],
+            "tag": "v2.10"
+        },
+        "lib_fmt": {
+            "use": true,
+            "conan": true,
+            "name": "fmt",
+            "version": "5.3.0",
+            "account": {
+                "acc_name": "bincrafters",
+                "channel": "stable"
+            }
+        },
+        "lib_date": {
+            "use": false,
+            "conan": true,
+            "name": "date",
+            "version": "2.4.1"
+        },
+        "lib_lngs": {
+            "use": true,
+            "platform": true,
+            "name": "lngs"
+        }
+    }
+}

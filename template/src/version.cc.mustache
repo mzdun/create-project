@@ -1,0 +1,10 @@
+// Copyright (c) {{COPY.YEAR}} {{COPY.HOLDER}}
+// This code is licensed under {{COPY.LICENSE}} license (see LICENSE for details)
+
+#include <{{INCLUDE_PREFIX}}/version{{EXT.hxx}}>
+
+{{#use_lib_semver}}
+namespace {{NAMESPACE}} {
+	semver::project_version get_version() noexcept { return version; }
+}  // namespace {{NAMESPACE}}
+{{/use_lib_semver}}
