@@ -12,6 +12,20 @@
         "{{#platform}}🖥️ {{name}}{{/platform}}"
     ],
     "libs": {
+        "tool_coveralls": {
+            "use": true,
+            "tool": true,
+            "username": "mbits-libs",
+            "repo": "coveralls",
+            "cmake_hide": true
+        },
+        "tool_testing": {
+            "use": true,
+            "tool": true,
+            "username": "mbits-libs",
+            "repo": "testing",
+            "cmake_hide": true
+        },
         "lib_semver": {
             "use": true,
             "github": true,
@@ -44,6 +58,18 @@
                 "acc_name": "bincrafters",
                 "channel": "stable"
             }
+        },
+        "lib_gtest": {
+            "use": true,
+            "conan": true,
+            "name": "gtest",
+            "version": "1.10.0",
+            "options": [
+                {
+                    "option": "build_gmock",
+                    "value": "False"
+                }
+            ]
         },
         "lib_date": {
             "use": false,

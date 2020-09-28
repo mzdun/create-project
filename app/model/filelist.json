@@ -31,6 +31,9 @@
         "path": "{{SRCDIR}}/strings{{EXT.cxx}}",
         "when": "use_lib_lngs"
     },
+    "tests/sample_test.cc.mustache": {
+        "when": "use_lib_gtest"
+    },
     "data/strings/llcc.txt.mustache": {
         "when": "use_lib_lngs"
     },

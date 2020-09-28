@@ -9,6 +9,29 @@ project ({{PROJECT.NAME}}
 
 set(PROJECT_VERSION_STABILITY "-alpha.0") # "", or "-alpha", or "-beta", or "-rc.5"
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+set({{NAME_PREFIX}}_TESTING ON CACHE BOOL "Compile and/or run self-tests")
+set({{NAME_PREFIX}}_INSTALL ON CACHE BOOL "Install the {{#cmake.application}}application{{/cmake.application}}{{#cmake.library}}library{{/cmake.library}}")
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+{{#with_conan}}
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+{{/with_conan}}
+{{#use_tool_coveralls}}
+
+list(APPEND COVERALLS_DIRS
+  {{INCLUDEDIR}}
+  {{SRCDIR}}
+)
+
+include(tools/coveralls/Coveralls.cmake)
+
+if (COVERALLS AND NOT {{NAME_PREFIX}}_TESTING)
+  message(FATAL_ERROR "Coveralls are useless without -D{{NAME_PREFIX}}_TESTING=ON")
+endif()
+{{/use_tool_coveralls}}
 {{#with_platform}}
 
 find_package(PkgConfig)
@@ -20,11 +43,10 @@ pkg_check_modules({{link}}{{^link}}{{name}}{{/link}} REQUIRED IMPORTED_TARGET {{
 
 add_subdirectory(external)
 {{/with_github}}
-{{#with_conan}}
+{{#with_tool}}
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
-{{/with_conan}}
+add_subdirectory(tools)
+{{/with_tool}}
 
 # See <https://github.com/lefticus/cppbestpractices/blob/v1.0.0/02-Use_the_Tools_Available.md#compilers>
 if (MSVC)
@@ -222,4 +244,22 @@ if ({{NAME_PREFIX}}_INSTALL)
   install(TARGETS ${PROJECT_NAME})
   install(DIRECTORY {{INCLUDEDIR}} DESTINATION include)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/{{INCLUDEDIR}}/version.hh" DESTINATION {{INCLUDEDIR}})
+endif()
+
+##################################################################
+##  TESTING
+##################################################################
+
+if ({{NAME_PREFIX}}_TESTING)
+
+{{#use_lib_gtest}}
+set(EXTERNAL_GTEST ON)
+{{/use_lib_gtest}}
+{{#use_tool_testing}}
+include( ${CMAKE_CURRENT_SOURCE_DIR}/tools/testing/googletest.cmake )
+
+add_test_executable({{PROJECT.NAME}}-test {{#use_lib_gtest}}CONAN_PKG {{/use_lib_gtest}}DATA_PATH data)
+{{/use_tool_testing}}
+
+add_test(NAME {{PROJECT.NAME}} COMMAND {{PROJECT.NAME}}-test --gtest_filter=*)
 endif()

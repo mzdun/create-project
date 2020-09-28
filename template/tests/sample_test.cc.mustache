@@ -1,0 +1,31 @@
+#include <gtest/gtest.h>
+#include <filesystem>
+
+extern std::filesystem::path TESTING_data_path;
+
+namespace {{NAMESPACE}}::testing {
+	using namespace ::std::literals;
+	using ::testing::TestWithParam;
+	using ::testing::ValuesIn;
+
+	struct SampleTest : TestWithParam<std::string> {};
+
+	TEST_P(SampleTest, AlwaysFailing) {
+		auto const& arg = GetParam();
+		EXPECT_FALSE(arg.empty());
+	}
+
+	static const std::string strings[] = {
+	    "SA",
+	    "SAMP",
+	    "SAMPLE",
+	    "SAMPLETE",
+	    "SAMPLETEST",
+	    "SAMPLETE",
+	    "SAMPLE",
+	    "SAMP",
+	    "SA",
+	};
+
+	INSTANTIATE_TEST_SUITE_P(Strings, SampleTest, ValuesIn(strings));
+}  // namespace {{NAMESPACE}}::testing

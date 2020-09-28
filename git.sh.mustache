@@ -24,7 +24,12 @@ mkdir build
 {{#with_conan}}
 cd build && CXX=g++-10 CC=gcc-10 conan install .. --build missing -s build_type=Debug
 {{/with_conan}}
+{{^use_tool_coveralls}}
 cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+{{/use_tool_coveralls}}
+{{#use_tool_coveralls}}
+cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCOVERALLS=ON -DCMAKE_INSTALL_PREFIX=`pwd`/build
+{{/use_tool_coveralls}}
 ninja -C build
 {{#cmake.application}}
 {{#with_conan}}
@@ -48,3 +53,13 @@ build/{{PROJECT.NAME}} --path dummy 5
 build/{{PROJECT.NAME}} --path dummy 6
 {{/with_conan}}
 {{/cmake.application}}
+{{^use_tool_coveralls}}
+ninja -C build test
+{{/use_tool_coveralls}}
+{{#use_tool_coveralls}}
+cov init
+ninja -C build install
+ninja -C build coveralls
+cov import --in build/coveralls.json
+cov list
+{{/use_tool_coveralls}}
