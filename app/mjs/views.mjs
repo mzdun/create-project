@@ -81,7 +81,8 @@ function createForm(selector) {
     document.querySelector(selector).append(
         E('form').with(
             E('div', {'class': 'form'}).with(
-                createSwitches(libraries),
+                createSwitches(libraries.slice(0, (libraries.length + 1) / 2)),
+                createSwitches(libraries.slice((libraries.length + 1) / 2)),
                 createSwitches(switches),
                 createInputs(inputs.slice(0, (inputs.length + 1) / 2)),
                 createInputs(inputs.slice((inputs.length + 1) / 2))

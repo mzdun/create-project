@@ -53,11 +53,7 @@
             "use": true,
             "conan": true,
             "name": "fmt",
-            "version": "5.3.0",
-            "account": {
-                "acc_name": "bincrafters",
-                "channel": "stable"
-            }
+            "version": "7.0.3"
         },
         "lib_gtest": {
             "use": true,
@@ -76,6 +72,12 @@
             "conan": true,
             "name": "date",
             "version": "2.4.1"
+        },
+        "lib_json": {
+            "use": false,
+            "conan": true,
+            "name": "nlohmann_json",
+            "version": "3.9.1"
         },
         "lib_lngs": {
             "use": true,
