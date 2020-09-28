@@ -184,6 +184,8 @@ async function loadModel() {
         fetchJson('model/libraries.json').then(loadInternals),
     ])
 
+    internal.libname_tmplt = internal.libname_tmplt.join('')
+
     fixups.setFileExts(internal.fileext)
     model.filelist = ''
     model.files = {}

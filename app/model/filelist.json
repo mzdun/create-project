@@ -44,6 +44,9 @@
     "external/CMakeLists.txt.mustache": {
         "when": "with_github"
     },
+    "tools/CMakeLists.txt.mustache": {
+        "when": "with_tool"
+    },
     "gitignore": {
         "path": ".gitignore"
     },

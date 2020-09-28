@@ -2,9 +2,15 @@
     "lib_kinds": [
         "github",
         "conan",
+        "tool",
         "platform"
     ],
-    "libname_tmplt": "{{#conan}}{{name}}/{{version}}{{#account}}<small>@{{acc_name}}/{{channel}}</small>{{/account}}{{/conan}}{{#github}}{{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/github}}{{#platform}}{{name}}{{/platform}}",
+    "libname_tmplt": [
+        "{{#conan}}📦 {{name}}/{{version}}{{#account}}<small>@{{acc_name}}/{{channel}}</small>{{/account}}{{/conan}}",
+        "{{#github}}🗂️ {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/github}}",
+        "{{#tool}}🧰 {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/tool}}",
+        "{{#platform}}🖥️ {{name}}{{/platform}}"
+    ],
     "libs": {
         "lib_semver": {
             "use": true,

@@ -10,6 +10,16 @@ git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
 git -C external/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout v{{version}}
 {{/version}}{{/tag}}
 {{/github}}
+{{#tool}}
+git submodule add https://github.com/{{username}}/{{repo}}.git tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}}
+{{#tag}}
+git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
+git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout {{tag}}
+{{/tag}}{{^tag}}{{#version}}
+git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
+git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout v{{version}}
+{{/version}}{{/tag}}
+{{/tool}}
 mkdir build
 {{#with_conan}}
 cd build && CXX=g++-10 CC=gcc-10 conan install .. --build missing -s build_type=Debug

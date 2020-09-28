@@ -3,5 +3,12 @@
 {{name}}/{{version}}{{#account}}@{{acc_name}}/{{channel}}{{/account}}
 {{/conan}}
 
+[options]
+{{#conan}}
+{{#options}}
+{{name}}:{{option}}={{value}}
+{{/options}}
+{{/conan}}
+
 [generators]
 cmake
