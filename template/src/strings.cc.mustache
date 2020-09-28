@@ -15,7 +15,7 @@ namespace {{NAMESPACE}} {
 		    dirinfo::info::build, "{{PROJECT.NAME}}");
 
 		auto system = lngs::system_locales();
-		built_.init();
+		built_.init_builtin();
 		if (installed_.open_first_of(system)) {
 			auto culture = installed_.attr(lngs::ATTR_CULTURE);
 			if (!culture.empty()) {
