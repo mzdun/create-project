@@ -20,6 +20,8 @@ git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} fetch
 git -C tools/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} checkout v{{version}}
 {{/version}}{{/tag}}
 {{/tool}}
+git commit -m "Zeroth commit"
+mkdir -p {{INCLUDEDIR}}
 mkdir build
 {{#with_conan}}
 cd build && CXX=g++-10 CC=gcc-10 conan install .. --build missing -s build_type=Debug
@@ -28,7 +30,7 @@ cd build && CXX=g++-10 CC=gcc-10 conan install .. --build missing -s build_type=
 cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 {{/use_tool_coveralls}}
 {{#use_tool_coveralls}}
-cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCOVERALLS=ON -DCMAKE_INSTALL_PREFIX=`pwd`/build
+cd build && CXX=g++-10 CC=gcc-10 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -D{{NAME_PREFIX}}_COVERALLS=ON -DCMAKE_INSTALL_PREFIX=`pwd`/build
 {{/use_tool_coveralls}}
 ninja -C build
 {{#cmake.application}}

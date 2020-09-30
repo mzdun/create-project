@@ -56,6 +56,9 @@
     "clang-format": {
         "path": ".clang-format"
     },
+    "travis.yml.mustache": {
+        "path": ".travis.yml"
+    },
     "conanfile.txt.mustache": {
         "when": "with_conan"
     },

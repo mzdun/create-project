@@ -10,25 +10,42 @@ project ({{PROJECT.NAME}}
 set(PROJECT_VERSION_STABILITY "-alpha.0") # "", or "-alpha", or "-beta", or "-rc.5"
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-set({{NAME_PREFIX}}_TESTING ON CACHE BOOL "Compile and/or run self-tests")
-set({{NAME_PREFIX}}_INSTALL ON CACHE BOOL "Install the {{#cmake.application}}application{{/cmake.application}}{{#cmake.library}}library{{/cmake.library}}")
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  message(STATUS "{{PROJECT.NAME}}: Standalone")
+  set({{NAME_PREFIX}}_STANDALONE ON)
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
+  # Standalone will be compiled with C++20 to suppport char8_t,
+  # clients need at least 17 to compile (for string_view for instance).
+  set(STANDARD 20 CACHE BOOL "Tweak the required standard")
+  set(CMAKE_CXX_STANDARD ${STANDARD})
+  set(CMAKE_CXX_STANDARD_REQUIRED OFF)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+
+  find_package(Python3 COMPONENTS Interpreter REQUIRED)
 {{#with_conan}}
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup(TARGETS)
 {{/with_conan}}
+else()
+  message(STATUS "{{PROJECT.NAME}}: Subdir")
+  set({{NAME_PREFIX}}_STANDALONE OFF)
+endif()
+
+set({{NAME_PREFIX}}_TESTING {{${}}{{NAME_PREFIX}}_STANDALONE} CACHE BOOL "Compile and/or run self-tests")
+set({{NAME_PREFIX}}_INSTALL {{${}}{{NAME_PREFIX}}_STANDALONE} CACHE BOOL "Install the {{#cmake.application}}application{{/cmake.application}}{{#cmake.library}}library{{/cmake.library}}")
 {{#use_tool_coveralls}}
 
-list(APPEND COVERALLS_DIRS
+set(COVERALLS_PREFIX {{NAME_PREFIX}}_)
+list(APPEND {{NAME_PREFIX}}_COVERALLS_DIRS
   {{INCLUDEDIR}}
   {{SRCDIR}}
 )
 
 include(tools/coveralls/Coveralls.cmake)
 
-if (COVERALLS AND NOT {{NAME_PREFIX}}_TESTING)
+if ({{NAME_PREFIX}}_COVERALLS AND NOT {{NAME_PREFIX}}_TESTING)
   message(FATAL_ERROR "Coveralls are useless without -D{{NAME_PREFIX}}_TESTING=ON")
 endif()
 {{/use_tool_coveralls}}
@@ -243,7 +260,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 if ({{NAME_PREFIX}}_INSTALL)
   install(TARGETS ${PROJECT_NAME})
   install(DIRECTORY {{INCLUDEDIR}} DESTINATION include)
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/{{INCLUDEDIR}}/version.hh" DESTINATION {{INCLUDEDIR}})
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/{{INCLUDEDIR}}/version{{EXT.hxx}}" DESTINATION {{INCLUDEDIR}})
 endif()
 
 ##################################################################
@@ -258,8 +275,10 @@ set(EXTERNAL_GTEST ON)
 {{#use_tool_testing}}
 include( ${CMAKE_CURRENT_SOURCE_DIR}/tools/testing/googletest.cmake )
 
-add_test_executable({{PROJECT.NAME}}-test {{#use_lib_gtest}}CONAN_PKG {{/use_lib_gtest}}DATA_PATH data)
+add_test_executable(${PROJECT_NAME}-test {{#use_lib_gtest}}CONAN_PKG {{/use_lib_gtest}}DATA_PATH data{{#cmake.library}} LIBRARIES ${PROJECT_NAME}{{/cmake.library}})
+target_compile_options(${PROJECT_NAME}-test PRIVATE ${UTFCONV_ADDITIONAL_WALL_FLAGS})
+target_compile_features(${PROJECT_NAME}-test PRIVATE cxx_std_17)
 {{/use_tool_testing}}
 
-add_test(NAME {{PROJECT.NAME}} COMMAND {{PROJECT.NAME}}-test --gtest_filter=*)
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}-test --gtest_filter=*)
 endif()

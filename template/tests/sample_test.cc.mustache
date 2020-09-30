@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 #include <filesystem>
+{{#use_lib_semver}}
+#include <{{INCLUDEDIR}}/version{{EXT.hxx}}>
+{{/use_lib_semver}}
 
 extern std::filesystem::path TESTING_data_path;
 
@@ -9,6 +12,13 @@ namespace {{NAMESPACE}}::testing {
 	using ::testing::ValuesIn;
 
 	struct SampleTest : TestWithParam<std::string> {};
+{{#use_lib_semver}}
+
+	TEST(SampleTest, Version) {
+		EXPECT_EQ(version, get_version());
+		EXPECT_TRUE(version.compatible_with(get_version()));
+	}
+{{/use_lib_semver}}
 
 	TEST_P(SampleTest, AlwaysFailing) {
 		auto const& arg = GetParam();
