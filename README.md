@@ -1,5 +1,7 @@
 # Create project from template
-Provides starting point for a new project.
+Provides a starting point for a new project.
+
+![Title card](readme.png)
 
 - Start with `python server.py`,
 - Navigate to http://localhost:8000/app/,
