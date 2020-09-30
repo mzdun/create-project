@@ -36,15 +36,18 @@ function label(id, text) {
 function createSwitches(values) {
     let root = E('div', {'class': 'inputs'})
 
-    for (let [id, text, value] of values) {
+    for (let [id, text, value, unused, hint] of values) {
         const input = E('input', {id: id, type: 'checkbox'})
         input.checked = value
         input.addEventListener('input', renderFiles)
 
-        root.append(E('div', {'class': 'input'}).with(
+        let parent = E('div', {'class': 'input'}).with(
             label(id, text),
             input
-        ))
+        )
+        if (hint)
+            parent.setAttribute('title', hint)
+        root.append(parent)
     }
 
     return root

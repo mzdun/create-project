@@ -6,10 +6,10 @@
         "platform"
     ],
     "libname_tmplt": [
-        "{{#conan}}📦 {{name}}/{{version}}{{#account}}<small>@{{acc_name}}/{{channel}}</small>{{/account}}{{/conan}}",
-        "{{#github}}🗂️ {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/github}}",
-        "{{#tool}}🧰 {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/tool}}",
-        "{{#platform}}🖥️ {{name}}{{/platform}}"
+        "{{#conan}}<span title='Conan package'>📦</span> {{name}}/{{version}}{{#account}}<small>@{{acc_name}}/{{channel}}</small>{{/account}}{{/conan}}",
+        "{{#github}}<span title='GitHub library'>🗂️</span> {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/github}}",
+        "{{#tool}}<span title='GitHub tool'>🧰</span> {{username}}/{{dirname}}{{^dirname}}{{repo}}{{/dirname}} {{#tag}}<small>({{tag}})</small>{{/tag}}{{^tag}}{{#version}}<small>(v{{version}})</small>{{/version}}{{/tag}}{{/tool}}",
+        "{{#platform}}<span title='Locally installed'>🖥️</span> {{name}}{{/platform}}"
     ],
     "libs": {
         "tool_coveralls": {
@@ -17,27 +17,31 @@
             "tool": true,
             "username": "mbits-libs",
             "repo": "coveralls",
-            "cmake_hide": true
+            "cmake_hide": true,
+            "hint": "CMake script for coveralls.io"
         },
         "tool_testing": {
             "use": true,
             "tool": true,
             "username": "mbits-libs",
             "repo": "testing",
-            "cmake_hide": true
+            "cmake_hide": true,
+            "hint": "Google Test environment; needs gtest"
         },
         "lib_semver": {
             "use": true,
             "github": true,
             "username": "mbits-libs",
-            "repo": "semver"
+            "repo": "semver",
+            "hint": "Semantic Versioning for the project"
         },
         "lib_args": {
             "use": true,
             "github": true,
             "username": "mbits-libs",
             "repo": "args",
-            "version": "0.10.0"
+            "version": "0.10.0",
+            "hint": "Argument parser\nuseful for application projects"
         },
         "lib_ctre": {
             "use": false,
@@ -47,13 +51,15 @@
             "dirname": "ctre",
             "link": "ctre::ctre",
             "options": [ { "name": "CTRE_BUILD_TESTS", "value": "OFF" } ],
-            "tag": "v2.10"
+            "tag": "v2.10",
+            "hint": "Compile-time Regular Expressions"
         },
         "lib_fmt": {
             "use": true,
             "conan": true,
             "name": "fmt",
-            "version": "7.0.3"
+            "version": "7.0.3",
+            "hint": "{fmt}: C++20 std::format and more\nA modern formatting library"
         },
         "lib_gtest": {
             "use": true,
@@ -65,24 +71,28 @@
                     "option": "build_gmock",
                     "value": "False"
                 }
-            ]
+            ],
+            "hint": "Google Testing and Mocking Framework\n(minus Mocking part)"
         },
         "lib_date": {
             "use": false,
             "conan": true,
             "name": "date",
-            "version": "2.4.1"
+            "version": "2.4.1",
+            "hint": "C++20 chrono, before it was C++20 chrono"
         },
         "lib_json": {
             "use": false,
             "conan": true,
             "name": "nlohmann_json",
-            "version": "3.9.1"
+            "version": "3.9.1",
+            "hint": "JSON for Modern C++"
         },
         "lib_lngs": {
             "use": true,
             "platform": true,
-            "name": "lngs"
+            "name": "lngs",
+            "hint": "Locale file format & processor"
         }
     }
 }

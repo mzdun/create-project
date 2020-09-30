@@ -26,13 +26,25 @@ function store(key, val) {
 
 function getLibraries() {
     return Object.entries(model.libs).map(([key, descr]) => {
-        return [key, mustache.render(internal.libname_tmplt, descr), load(key, descr.use, true), descr.use]
+        return [
+            key,
+            mustache.render(internal.libname_tmplt, descr),
+            load(key, descr.use, true),
+            descr.use,
+            descr.hint || ''
+        ]
     })
 }
 
 function getSwitches() {
     return Object.entries(internal.switches).map(([key, defaultValue]) => {
-        return [key, key.replaceAll('_', '-'), load(key, defaultValue, true)]
+        return [
+            key,
+            key.replaceAll('_', '-'),
+            load(key, defaultValue, true),
+            true,
+            ''
+        ]
     })
 }
 
