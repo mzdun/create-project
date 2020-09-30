@@ -1,5 +1,5 @@
 # Create project from template
-Provides a starting point for a new project.
+A starting point for a new project.
 
 ![Title card](readme.png)
 
